@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{master :: layout(~{::title},_,_,_,~{::main},_)}">
+
+<head>
+
+    <!-- TITLE -->
+    <title>Home</title>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styleIndex.css}"/>
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+
+
+<body>
+<main th:fragment="content">
+    <h1 align="center" class="display-3">All Items</h1>
+    <br>
+    <!-- MAIN CONTAINER -->
+    <br>
+    <div class="container">
+        <form class="form-inline mr-auto">
+            <input onkeyup="search(this)" id="q" class="form-control mr-sm-2" type="text" placeholder="Search your item" aria-label="Search">
+        </form>
+        <br>
+        <p sec:authorize="isAuthenticated()" class="lead">Welcome <b th:text="${#authentication.name}">user</b></p>
+        <p sec:authorize="!isAuthenticated()" class="lead">Please authenticate yourself</p>
+        <form>
+        <div class="form-row align-items-center">
+            <div class="col-auto my-1">
+                <label class="mr-sm-2" for="inlineFormCustomSelect">Filter by category</label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onclick="category(this)">
+                    <option th:value="All" th:text="All"></option>
+                    <option id="cat" th:each="category: ${getCategory}" th:value="${category.category}" th:text="${category.getCategory()}"></option>
+                </select>
+            </div>
+        </div>
+        </form>
+        <br>
+        <!-- ITEMS -->
+        <div id="products" class="row view-group">
+            <!-- ITEM -->
+            <div class="item col-xs-4 col-lg-4" th:each="item : ${getItems}">
+                <div id="single_prod"  class="thumbnail card">
+                    <!-- IMAGE -->
+                    <div align="center">
+
+                        <img id="immagine" class="card-img-top" width="100%" height="250" preserveaspectratio="xMidYMid slice" focusable="false" role="img" alt="" th:src="@{'/item/'+${item.id}+'/image'}"/>
+                    </div>
+
+                    <hr>
+                    <!-- FIELDS -->
+                    <div class="caption card-body">
+                        <h4 class="group card-title inner list-group-item-heading" th:text="${item.getTitle()}">Title</h4>
+                        <p class="group inner list-group-item-text" th:text="${item.getDescription()}">Description</p>
+                        <!-- OTHER FIELDS & SHOW -->
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead" th:text="${#dates.format(item.getDate(), 'dd/MM/yyyy')}">
+                                    <time>Date</time>
+                                </p>
+                            </div>
+                            <button type="submit" class="btn btn-outline-success" th:onclick="'window.location.href = \'' + @{/item/{id}(id=${item.getId()})} + '\''">Visualizza</button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

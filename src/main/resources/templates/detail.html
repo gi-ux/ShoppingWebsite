@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{master :: layout(~{::title},_,_,~{::nav},~{::main},_)}">
+
+<head>
+    <meta name="author" content="Gianluca Nogara">
+    <meta name="description" content="HTML insertion page">
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet">
+    <title>Create Item</title>
+</head>
+
+<body>
+<nav th:replace="nav" class="navbar navbar-light bg-light">
+    <form class="form-inline" th:action="@{/}">
+        <button class="btn btn-outline-success" type="submit">Homepage</button>
+    </form>
+</nav>
+<main th:fragment="content">
+    <h1 align="center" class="display-3">Detail Item</h1>
+        <div class="thumbnail card">
+            <!-- IMAGE -->
+            <div align="center">
+                <br>
+                <img id="immagine" class="group list-group-image img-fluid"  th:src="@{'/item/'+${getItem.id}+'/image'}"/>
+            </div>
+
+            <br>
+            <hr>
+            <!-- FIELDS -->
+            <div class="caption card-body">
+                <h4 class="group card-title inner list-group-item-heading" th:text="${getItem.getTitle()}">Title</h4>
+                <p class="group inner list-group-item-text" th:text="${getItem.printDescription()}">Description</p>
+                <p class="group inner list-group-item-text" th:text="${getItem.printAuthor()}">Author</p>
+                <p class="group inner list-group-item-text" th:text="${getItem.printCategory()}">Category</p>
+                <p class="group inner list-group-item-text" th:text="${getItem.printAnnuncio()}">Annuncio</p>
+                <p class="group inner list-group-item-text" th:text="${getItem.printCosto()}">Annuncio</p>
+
+                <!-- OTHER FIELDS & SHOW -->
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <p class="lead" th:text="${#dates.format(getItem.getDate(), 'dd/MM/yyyy')}">
+                            <time>Date</time>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <br>
+    <div align="center">
+        <button th:if="${!#authentication.name.equals(getItem.getAuthor().getUsername())}" class="btn btn-outline-success" sec:authorize="isAuthenticated()" type="submit" th:onclick="'window.location.href = \'' + @{/item/{id}/compra(id=${getItem.getId()})} + '\''" >Buy</button>
+        <button class="btn btn-outline-success" sec:authorize="isAuthenticated()" type="submit" th:onclick="'window.location.href = \'' + @{/item/{id}/pref(id=${getItem.getId()})} + '\''" >Add to fav</button>
+        <button th:if="${#authentication.name.equals(getItem.getAuthor().getUsername())}" class="btn btn-outline-success" sec:authorize="isAuthenticated()" type="submit" th:onclick="'window.location.href = \'' + @{/item/{id}/edit(id=${getItem.getId()})} + '\''" >Edit</button>
+        <button class="btn btn-outline-success" type="submit" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="'window.location.href = \'' + @{/item/{id}/delete(id=${getItem.getId()})} + '\''">Delete</button>
+    </div>
+</main>
+</body>
+</html>
+
+

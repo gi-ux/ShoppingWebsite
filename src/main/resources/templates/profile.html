@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{master :: layout(~{::title},_,_,~{::nav},~{::main},_)}">
+
+<head>
+    <meta name="author" content="Gianluca Nogara">
+    <meta name="description" content="HTML profile page">
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet">
+    <title>Profile</title>
+</head>
+
+    <body>
+        <nav th:replace="nav" class="navbar navbar-light bg-light">
+            <form class="form-inline" th:action="@{/}">
+                <button class="btn btn-outline-success" type="submit">Homepage</button>
+            </form>
+            <button class="btn btn-outline-success" th:onclick="'window.location.href = \'' + @{/logout} + '\''"  type="submit">Logout</button>
+        </nav>
+        <main th:fragment="content">
+            <div align="center">
+                <h1 align="center" class="display-3">Detail Profile</h1>
+                <div class="caption card-body">
+                    <p class="h6">Your info</p>
+                    <p>Name:</p><p class="group inner list-group-item-text" th:text="${getUser.getNome()}">Name</p>
+                    <p>Surname:</p><p class="group inner list-group-item-text" th:text="${getUser.getCognome()}">Surname</p>
+                    <p>User:</p><p class="group inner list-group-item-text" th:text="${getUser.getUsername()}">Username</p>
+                    <p class="group inner list-group-item-text" th:text="${getUser.getRole().getRole()}">Role</p>
+                    <p>Credito:</p><p class="group inner list-group-item-text" th:text="${getUser.getCredito()}">Credit</p>
+                    <hr>
+                    <p class="h6">Favourite items</p>
+                    <p class="group inner list-group-item-text" th:each="item : ${getFav}" th:text="${item.getTitle()}">Item</p>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
+
+

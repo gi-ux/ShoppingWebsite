@@ -1,0 +1,15 @@
+#copyright {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+header{
+    background-color: #b0d1c6;
+}
+
+#single_prod{
+    box-shadow: 5px 5px 3px grey;
+
+}
+

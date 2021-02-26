@@ -1,0 +1,22 @@
+variables:
+  WAR_NAME: '${CI_PROJECT_NAME}.war'
+  APP_NAME: '${CI_PROJECT_NAME}'
+
+maven-build:
+  stage: build
+  script: ~/build.sh
+  artifacts:
+    paths:
+      - target/*.war
+  only:
+    - master
+
+app-deploy:
+  stage: deploy
+  script:
+    - ~/deploy.sh $WAR_NAME $APP_NAME
+  environment:
+    name: staging
+    url: http://isin03.dti.supsi.ch:81/${CI_PROJECT_NAME}
+  only:
+    - master
